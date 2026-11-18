@@ -1,21 +1,13 @@
 """ This module contains a function to calculate the
-total spents from each category from the expenses.csv file. """
+total spents from each category from the cleaned expenses. """
 
-import csv
 
-def get_spents_per_category():
-    """ calculate the total spents from each category from the expenses.csv file """
-    with open('expenses.csv', mode = 'r', newline = '', encoding = 'utf-8') as file:
-        # since the rows are tab-seperated,
-        # we need to specify the delimiter as '\t', default is comma ','
-        reader = csv.DictReader(file, delimiter = '\t')
-        spents_per_category = {}
-        for row in reader:
-            if row['amount'] != '':
-                category = row['category'].lower()
-                amount = float(row['amount'].replace(',', '').replace('₹', ''))
-                if category in spents_per_category:
-                    spents_per_category[category] += amount
-                else:
-                    spents_per_category[category] = amount
+def get_spents_per_category(expenses):
+    """ calculate the total spents from each category from the cleaned expenses """
+    spents_per_category = {}
+    for expense in expenses:
+        category = expense['category']
+        # .get() returns 0 the first time a category is seen,
+        # so we don't need a separate if/else
+        spents_per_category[category] = spents_per_category.get(category, 0) + expense['amount']
     return spents_per_category

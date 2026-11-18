@@ -1,18 +1,14 @@
-""" This module contains a function to calculate the
-top 3 expenses from the expenses.csv file. """
-import csv
-
-def get_top_3_expenses():
-    """ calculate the top 3 expenses from the expenses.csv file """
-    with open('expenses.csv', mode='r', newline='', encoding='utf-8') as file:
-        reader = csv.DictReader(file, delimiter='\t')
-        expenses = []
-        for row in reader:
-            if row['amount'] != '':
-                amount = float(row['amount'].replace(',', '').replace('₹', ''))
-                expenses.append((row['category'].lower(), amount))
+""" This module contains a function to find the
+top 3 expenses from the cleaned expenses. """
 
 
-    # Sort expenses by amount in descending order and return the top 3
-    expenses.sort(key=lambda x: x[1], reverse=True)
-    return expenses[:3]
+def get_amount(expense):
+    """ key function for sorting: return the amount of an expense """
+    return expense['amount']
+
+
+def get_top_3_expenses(expenses):
+    """ return the 3 biggest expenses, keeping the whole row
+    so the description can be printed too """
+    # sorted() returns a new list and leaves the original untouched
+    return sorted(expenses, key=get_amount, reverse=True)[:3]
